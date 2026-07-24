@@ -77,43 +77,75 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Grouped Navigation Items matching 18 Screens - dynamic depending on Role Permissions
+  // Grouped Navigation Items matching 18 Screens - dynamic depending on Role Permissions and translated languages
   const getNavGroups = () => {
+    const isEn = lang === 'EN';
+    const isKn = lang === 'KN';
+    const isHi = lang === 'HI';
+    const isMr = lang === 'MR';
+
+    // Translations helper for navigation
+    const labels = {
+      dashboard: isKn ? 'ಅವಲೋಕನ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್' : isHi ? 'सिंहावलोकन डैशबोर्ड' : isMr ? 'पूर्वावलोकन डॅशबोर्ड' : 'Overview Dashboard',
+      crimegpt: isKn ? 'ಕ್ರೈಮ್‌ಜಿಪಿಟಿ ಸಹಾಯಕ' : isHi ? 'क्राइमजीपीटी सहायक' : isMr ? 'क्राइमजीपीटी सहाय्यक' : 'CrimeGPT Copilot',
+      workspace: isKn ? 'ಅಧಿಕಾರಿ ಕಾರ್ಯಕ್ಷೇತ್ರ' : isHi ? 'अधिकारी कार्यक्षेत्र' : isMr ? 'अधिकारी कार्यक्षेत्र' : 'Officer Workspace',
+      firExplorer: isKn ? 'ಎಫ್‌ಐಆರ್ ಎಕ್ಸ್‌ಪ್ಲೋರರ್' : isHi ? 'प्राथमिकी एक्सप्लोरर' : isMr ? 'एफआयआर एक्सप्लोरर' : 'FIR Explorer',
+      profiles: isKn ? 'ಅಪರಾಧಿ ಪ್ರೊಫೈಲ್‌ಗಳು' : isHi ? 'आपराधिक प्रोफाइल' : isMr ? 'गुन्हेगारी प्रोफाइल' : 'Criminal Profiles',
+      evidence: isKn ? 'ಪುರಾವೆ ಕೇಂದ್ರ' : isHi ? 'साक्ष्य केंद्र' : isMr ? 'पुरावा केंद्र' : 'Evidence Center',
+      timeline: isKn ? 'ಪ್ರಕರಣದ ಕಾಲಾವಧಿ' : isHi ? 'मामला समयरेखा' : isMr ? 'खटला कालक्रम' : 'Case Timeline',
+      similarity: isKn ? 'ಪ್ರಕರಣ ಹೋಲಿಕೆ' : isHi ? 'मामला समानता' : isMr ? 'खटला समानता' : 'Case Similarity',
+      network: isKn ? 'ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕಗಳು' : isHi ? 'नेटवर्क लिंक' : isMr ? 'नेटवर्क दुवे' : 'Network Linkages',
+      heatmap: isKn ? 'ಜಿಐಎಸ್ ಅಪರಾಧ ನಕ್ಷೆ' : isHi ? 'जीआईएस अपराध मानचित्र' : isMr ? 'जीआयएस गुन्हे नकाशा' : 'GIS Crime Heatmap',
+      financial: isKn ? 'ಹಣಕಾಸು ಅಪರಾಧಗಳು' : isHi ? 'वित्तीय अपराध' : isMr ? 'आर्थिक गुन्हे' : 'Financial Crimes',
+      behavior: isKn ? 'ನಡವಳಿಕೆ ಪ್ರೊಫೈಲ್' : isHi ? 'व्यवहार प्रोफाइल' : isMr ? 'वर्तन प्रोफाइल' : 'MO & Behavior Profile',
+      forecast: isKn ? 'ಅಪರಾಧ ಮುನ್ಸೂಚನೆ' : isHi ? 'जोखिम पूर्वानुमान' : isMr ? 'धोका अंदाज' : 'XGBoost Risk Forecast',
+      policy: isKn ? 'ನೀತಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್' : isHi ? 'नीति डैशबोर्ड' : isMr ? 'धोरण डॅशबोर्ड' : 'Policy Dashboard',
+      explainability: isKn ? 'ವಿವರಣಾತ್ಮಕ ಎಐ' : isHi ? 'एआई व्याख्यात्मकता' : isMr ? 'एआय स्पष्टीकरण' : 'AI Explainability',
+      settings: isKn ? 'ವ್ಯವಸ್ಥೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳು' : isHi ? 'सिस्टम सेटिंग्स' : isMr ? 'प्रणाली सेटिंग्ज' : 'System Settings'
+    };
+
+    const groupTitles = {
+      cmd: isKn ? 'ಕಮಾಂಡ್ ಸೆಂಟರ್' : isHi ? 'कमांड सेंटर' : isMr ? 'कमांड सेंटर' : 'Command Center',
+      records: isKn ? 'ತನಿಖಾ ದಾಖಲೆಗಳು' : isHi ? 'जांच रिकॉर्ड' : isMr ? 'तपास रेकॉर्ड' : 'Investigative Records',
+      intel: isKn ? 'ಸುಧಾರಿತ ಗುಪ್ತಚರ' : isHi ? 'उन्नत खुफिया' : isMr ? 'प्रगत गुप्तहेर' : 'Advanced Intelligence',
+      gov: isKn ? 'ಆಡಳಿತ ಮತ್ತು ವ್ಯವಸ್ಥೆ' : isHi ? 'प्रणाली और शासन' : isMr ? 'प्रणाली आणि शासन' : 'System & Governance'
+    };
+
     const groups = [
       {
-        title: 'Command Center',
+        title: groupTitles.cmd,
         items: [
-          { screen: 'dashboard', label: 'Overview Dashboard', icon: ChartBarIcon, allowed: ['*'] },
-          { screen: 'crimegpt', label: 'CrimeGPT Copilot', icon: SparklesIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
-          { screen: 'workspace', label: 'Officer Workspace', icon: ClipboardDocumentIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] }
+          { screen: 'dashboard', label: labels.dashboard, icon: ChartBarIcon, allowed: ['*'] },
+          { screen: 'crimegpt', label: labels.crimegpt, icon: SparklesIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
+          { screen: 'workspace', label: labels.workspace, icon: ClipboardDocumentIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] }
         ]
       },
       {
-        title: 'Investigative Records',
+        title: groupTitles.records,
         items: [
-          { screen: 'fir-explorer', label: 'FIR Explorer', icon: FolderOpenIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
-          { screen: 'criminal-profile', label: 'Criminal Profiles', icon: UserCircleIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
-          { screen: 'evidence', label: 'Evidence Center', icon: DocumentDuplicateIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] },
-          { screen: 'timeline', label: 'Case Timeline', icon: ClockIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] },
-          { screen: 'similarity', label: 'Case Similarity', icon: QueueListIcon, allowed: ['Investigator', 'Crime Analyst', 'Administrator'] }
+          { screen: 'fir-explorer', label: labels.firExplorer, icon: FolderOpenIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
+          { screen: 'criminal-profile', label: labels.profiles, icon: UserCircleIcon, allowed: ['Investigator', 'Crime Analyst', 'Supervisor', 'SCRB Officer', 'Administrator'] },
+          { screen: 'evidence', label: labels.evidence, icon: DocumentDuplicateIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] },
+          { screen: 'timeline', label: labels.timeline, icon: ClockIcon, allowed: ['Investigator', 'Supervisor', 'Administrator'] },
+          { screen: 'similarity', label: labels.similarity, icon: QueueListIcon, allowed: ['Investigator', 'Crime Analyst', 'Administrator'] }
         ]
       },
       {
-        title: 'Advanced Intelligence',
+        title: groupTitles.intel,
         items: [
-          { screen: 'network', label: 'Network Linkages', icon: FingerPrintIcon, allowed: ['Crime Analyst', 'Supervisor', 'Administrator'] },
-          { screen: 'heatmap', label: 'GIS Crime Heatmap', icon: MapIcon, allowed: ['Crime Analyst', 'Supervisor', 'Policymaker', 'Administrator'] },
-          { screen: 'financial', label: 'Financial Crimes', icon: FolderOpenIcon, allowed: ['Crime Analyst', 'Supervisor', 'Administrator'] },
-          { screen: 'behavior', label: 'MO & Behavior Profile', icon: ClipboardDocumentIcon, allowed: ['Crime Analyst', 'Administrator'] },
-          { screen: 'forecast', label: 'XGBoost Risk Forecast', icon: ChartBarIcon, allowed: ['Crime Analyst', 'Policymaker', 'Administrator'] }
+          { screen: 'network', label: labels.network, icon: FingerPrintIcon, allowed: ['Crime Analyst', 'Supervisor', 'Administrator'] },
+          { screen: 'heatmap', label: labels.heatmap, icon: MapIcon, allowed: ['Crime Analyst', 'Supervisor', 'Policymaker', 'Administrator'] },
+          { screen: 'financial', label: labels.financial, icon: FolderOpenIcon, allowed: ['Crime Analyst', 'Supervisor', 'Administrator'] },
+          { screen: 'behavior', label: labels.behavior, icon: ClipboardDocumentIcon, allowed: ['Crime Analyst', 'Administrator'] },
+          { screen: 'forecast', label: labels.forecast, icon: ChartBarIcon, allowed: ['Crime Analyst', 'Policymaker', 'Administrator'] }
         ]
       },
       {
-        title: 'System & Governance',
+        title: groupTitles.gov,
         items: [
-          { screen: 'policy', label: 'Policy Dashboard', icon: ShieldCheckIcon, allowed: ['Policymaker', 'Supervisor', 'Administrator'] },
-          { screen: 'explainability', label: 'AI Explainability', icon: ShieldCheckIcon, allowed: ['Supervisor', 'Administrator'] },
-          { screen: 'settings', label: 'System Settings', icon: WrenchIcon, allowed: ['Administrator'] }
+          { screen: 'policy', label: labels.policy, icon: ShieldCheckIcon, allowed: ['Policymaker', 'Supervisor', 'Administrator'] },
+          { screen: 'explainability', label: labels.explainability, icon: ShieldCheckIcon, allowed: ['Supervisor', 'Administrator'] },
+          { screen: 'settings', label: labels.settings, icon: WrenchIcon, allowed: ['Administrator'] }
         ]
       }
     ];
