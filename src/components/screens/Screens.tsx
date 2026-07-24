@@ -48,14 +48,7 @@ import NetworkGraphWrapper from '../graph/NetworkGraphWrapper';
 export function LoginScreen() {
   const { setCurrentRole } = useGlobalStore();
   const [role, setRole] = useState('Investigator');
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
   const [govId, setGovId] = useState('KSP-9921-2026');
-
-  const handleSendOtp = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOtpSent(true);
-  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,81 +68,45 @@ export function LoginScreen() {
           <p className="text-[10px] text-slate-400 mt-2">Karnataka State Police &bull; Government of India</p>
         </div>
 
-        {!otpSent ? (
-          <form onSubmit={handleSendOtp} className="space-y-5">
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Government Email / Badge ID</label>
-              <input
-                type="text"
-                required
-                value={govId}
-                onChange={(e) => setGovId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 text-slate-200 text-sm px-4 py-2.5 rounded focus:outline-none focus:border-blue-600 font-mono"
-              />
-            </div>
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Government Email / Badge ID</label>
+            <input
+              type="text"
+              required
+              value={govId}
+              onChange={(e) => setGovId(e.target.value)}
+              className="w-full bg-slate-955 border border-slate-700 text-slate-200 text-sm px-4 py-2.5 rounded focus:outline-none focus:border-blue-600 font-mono"
+            />
+          </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Operational Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 text-slate-200 text-sm px-4 py-2.5 rounded focus:outline-none focus:border-blue-600"
-              >
-                <option value="Investigator">Investigator (SI / CI)</option>
-                <option value="Crime Analyst">Crime Analyst (DSP / SP)</option>
-                <option value="Supervisor">Supervisor (IGP / ADGP)</option>
-                <option value="SCRB Officer">SCRB Officer (State Records)</option>
-                <option value="Administrator">System Administrator</option>
-                <option value="Policymaker">Policymaker (DG / Home Ministry)</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold uppercase tracking-widest py-3 rounded transition"
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Operational Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full bg-slate-955 border border-slate-700 text-slate-200 text-sm px-4 py-2.5 rounded focus:outline-none focus:border-blue-600"
             >
-              Request Secure OTP
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <div className="bg-slate-950 p-3 border border-slate-800 rounded mb-4 text-center">
-                <span className="text-[10px] text-emerald-400 font-mono">OTP Sent to registered +91 ******4521</span>
-              </div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Enter 6-Digit OTP</label>
-              <input
-                type="text"
-                required
-                maxLength={6}
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value)}
-                placeholder="0 0 0 0 0 0"
-                className="w-full bg-slate-950 border border-slate-700 text-slate-200 text-center tracking-[1em] font-mono text-lg py-2 rounded focus:outline-none focus:border-blue-600"
-              />
-            </div>
+              <option value="Investigator">Investigator (SI / CI)</option>
+              <option value="Crime Analyst">Crime Analyst (DSP / SP)</option>
+              <option value="Supervisor">Supervisor (IGP / ADGP)</option>
+              <option value="SCRB Officer">SCRB Officer (State Records)</option>
+              <option value="Administrator">System Administrator</option>
+              <option value="Policymaker">Policymaker (DG / Home Ministry)</option>
+            </select>
+          </div>
 
-            <div className="flex items-center justify-between text-[10px] text-slate-400">
-              <button type="button" onClick={() => setOtpSent(false)} className="hover:text-blue-400 underline">
-                Change ID
-              </button>
-              <button type="button" className="hover:text-blue-400 underline">
-                Resend OTP
-              </button>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold uppercase tracking-widest py-3 rounded transition"
-            >
-              Authenticate Account
-            </button>
-          </form>
-        )}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-widest py-3 rounded transition duration-150"
+          >
+            Authenticate Console
+          </button>
+        </form>
 
         {/* Biometric Placeholder */}
         <div className="mt-8 pt-6 border-t border-slate-800 text-center">
-          <button className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-300">
+          <button onClick={() => setCurrentRole(role)} className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-350">
             <FingerPrintIcon className="w-5 h-5" />
             <span>Fingerprint / Biometric Bypass</span>
           </button>
