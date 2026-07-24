@@ -190,6 +190,55 @@ export function DashboardScreen() {
     }
   };
 
+  const { lang } = useGlobalStore();
+
+  const t = {
+    EN: {
+      activeCases: "Today's Active Cases",
+      threatAlerts: "Critical Threat Alerts",
+      escalationText: "3 require urgent escalation",
+      patrolVehicles: "Patrol Vehicles Active",
+      weather: "Weather Alert",
+      weatherText: "Flood warning in coastal zones",
+      dashboardHeader: "Karnataka Police Command Console"
+    },
+    KN: {
+      activeCases: "ಇಂದಿನ ಸಕ್ರಿಯ ಪ್ರಕರಣಗಳು",
+      threatAlerts: "ನಿರ್ಣಾಯಕ ಬೆದರಿಕೆ ಎಚ್ಚರಿಕೆಗಳು",
+      escalationText: "3 ಕ್ಕೆ ತುರ್ತು ಕ್ರಮದ ಅಗತ್ಯವಿದೆ",
+      patrolVehicles: "ಗಸ್ತು ವಾಹನಗಳು ಸಕ್ರಿಯವಾಗಿವೆ",
+      weather: "ಹವಾಮಾನ ಎಚ್ಚರಿಕೆ",
+      weatherText: "ಕರಾವಳಿ ವಲಯಗಳಲ್ಲಿ ಪ್ರವಾಹದ ಎಚ್ಚರಿಕೆ",
+      dashboardHeader: "ಕರ್ನಾಟಕ ಪೊಲೀಸ್ ಕಮಾಂಡ್ ಕನ್ಸೋಲ್"
+    },
+    HI: {
+      activeCases: "आज के सक्रिय मामले",
+      threatAlerts: "महत्वपूर्ण खतरा अलर्ट",
+      escalationText: "3 के लिए तत्काल वृद्धि की आवश्यकता है",
+      patrolVehicles: "गश्ती वाहन सक्रिय",
+      weather: "मौसम अलर्ट",
+      weatherText: "तटीय क्षेत्रों में बाढ़ की चेतावनी",
+      dashboardHeader: "कर्नाटक पुलिस कमांड कंसोल"
+    },
+    MR: {
+      activeCases: "आजची सक्रिय प्रकरणे",
+      threatAlerts: "गंभीर चेतावणी अलर्ट",
+      escalationText: "3 त्वरित कारवाई आवश्यक आहे",
+      patrolVehicles: "गस्ती वाहने सक्रिय",
+      weather: "हवामान इशारा",
+      weatherText: "किनारपट्टी भागात पुराचा इशारा",
+      dashboardHeader: "कर्नाटक पोलीस कमांड कन्सोल"
+    }
+  }[lang as 'EN' | 'KN' | 'HI' | 'MR'] || {
+    activeCases: "Today's Active Cases",
+    threatAlerts: "Critical Threat Alerts",
+    escalationText: "3 require urgent escalation",
+    patrolVehicles: "Patrol Vehicles Active",
+    weather: "Weather Alert",
+    weatherText: "Flood warning in coastal zones",
+    dashboardHeader: "Karnataka Police Command Console"
+  };
+
   return (
     <div className="space-y-6">
       {renderRoleDashboardHeader()}
@@ -197,7 +246,7 @@ export function DashboardScreen() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">Today's Active Cases</span>
+            <span className="text-xs text-slate-400 font-semibold">{t.activeCases}</span>
             <DocumentTextIcon className="w-5 h-5 text-blue-500" />
           </div>
           <p className="text-2xl font-bold font-mono mt-2">142</p>
@@ -205,15 +254,15 @@ export function DashboardScreen() {
         </div>
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">Critical Threat Alerts</span>
+            <span className="text-xs text-slate-400 font-semibold">{t.threatAlerts}</span>
             <ExclamationTriangleIcon className="w-5 h-5 text-red-500" />
           </div>
           <p className="text-2xl font-bold font-mono mt-2 text-red-500">12</p>
-          <span className="text-[10px] text-red-400 font-medium font-mono">3 require urgent escalation</span>
+          <span className="text-[10px] text-red-400 font-medium font-mono">{t.escalationText}</span>
         </div>
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">Patrol Vehicles Active</span>
+            <span className="text-xs text-slate-400 font-semibold">{t.patrolVehicles}</span>
             <ShieldCheckIcon className="w-5 h-5 text-emerald-500" />
           </div>
           <p className="text-2xl font-bold font-mono mt-2">84 / 100</p>
@@ -221,11 +270,11 @@ export function DashboardScreen() {
         </div>
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">Weather Alert</span>
+            <span className="text-xs text-slate-400 font-semibold">{t.weather}</span>
             <ClockIcon className="w-5 h-5 text-amber-500" />
           </div>
           <p className="text-2xl font-bold font-mono mt-2">26°C - Heavy Rain</p>
-          <span className="text-[10px] text-amber-400 font-mono">Flood warning in coastal zones</span>
+          <span className="text-[10px] text-amber-400 font-mono">{t.weatherText}</span>
         </div>
       </div>
 
