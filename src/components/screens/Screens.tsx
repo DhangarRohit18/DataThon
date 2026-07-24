@@ -585,7 +585,7 @@ export function FIRExplorerScreen() {
                       <p className="text-[9px] text-slate-500 font-mono">{file.size}</p>
                     </div>
                   </div>
-                  <button className="text-[10px] text-blue-400 hover:text-blue-300 underline font-mono">
+                  <button className="text-[10px] text-red-500 hover:text-red-600 font-mono font-bold transition duration-150">
                     View
                   </button>
                 </div>
