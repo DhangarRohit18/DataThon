@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kavach-postgres
+    environment:
+      POSTGRES_DB: kavach_db
+      POSTGRES_USER: ksp_admin
+      POSTGRES_PASSWORD: KspSecurePassword2026
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ksp_admin -d kavach_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: kavach-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: kavach-neo4j
+    ports:
+      - "127.0.0.1:7474:7474" # Web Console
+      - "127.0.0.1:7687:7687" # Bolt Protocol
+    environment:
+      NEO4J_AUTH: neo4j/KspSecureGraph2026
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "KspSecureGraph2026", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: kavach-chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/index_data
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/index_data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kavach-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://ksp_admin:KspSecurePassword2026@postgres:5432/kavach_db
+      - REDIS_URL=redis://redis:6379/0
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=KspSecureGraph2026
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - JWT_SECRET=df092b3a1a9e88d01b81e82e88a03bb1e8aef100a0b0f0a203f191b928120e8b
+      - ENVIRONMENT=production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kavach-celery-worker
+    command: celery -A app.workers.tasks.celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://ksp_admin:KspSecurePassword2026@postgres:5432/kavach_db
+      - REDIS_URL=redis://redis:6379/0
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=KspSecureGraph2026
+    depends_on:
+      - redis
+      - postgres
+
+volumes:
+  postgres_data:
+  redis_data:
+  neo4j_data:
+  neo4j_logs:
+  chromadb_data:
