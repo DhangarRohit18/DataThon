@@ -4,7 +4,7 @@
   --background: #f8fafc;
   --foreground: #0f172a;
 
-  /* Day Mode (Light Theme Variables) - Deep Slate Navy & Refined Teal Accent */
+  /* Day Mode (Light Theme Variables) - Pune Police Navy Blue & Crimson Accent */
   --slate-950: #ffffff;
   --slate-900: #f1f5f9;
   --slate-850: #e2e8f0;
@@ -17,37 +17,37 @@
   --slate-200: #0f172a;
   --slate-100: #020617;
   
-  --blue-950: #f0fdfa;
-  --blue-900: #ccfbf1;
-  --blue-800: #99f6e4;
-  --blue-700: #5eead4;
-  --blue-600: #0d9488;
-  --blue-500: #0f766e;
+  --blue-950: #fef2f2;
+  --blue-900: #fee2e2;
+  --blue-800: #fca5a5;
+  --blue-700: #f87171;
+  --blue-600: #1e3a8a; /* Navy Blue */
+  --blue-500: #991b1b; /* Crimson Red */
 }
 
 .dark {
-  --background: #0b0f19;
+  --background: #090d16;
   --foreground: #f1f5f9;
 
-  /* Night Mode (Dark Theme Variables) - Midnight Charcoal & Glowing Teal Accent */
-  --slate-950: #0b0f19;
-  --slate-900: #111827;
-  --slate-850: #1f2937;
-  --slate-800: #374151;
-  --slate-700: #4b5563;
-  --slate-600: #9ca3af;
-  --slate-500: #d1d5db;
-  --slate-400: #e5e7eb;
-  --slate-300: #f3f4f6;
-  --slate-200: #f9fafb;
+  /* Night Mode (Dark Theme Variables) - Dark Navy & Vivid Red Accent */
+  --slate-950: #090d16;
+  --slate-900: #0f1626;
+  --slate-850: #1e293b;
+  --slate-800: #334155;
+  --slate-700: #475569;
+  --slate-600: #94a3b8;
+  --slate-500: #cbd5e1;
+  --slate-400: #e2e8f0;
+  --slate-300: #f1f5f9;
+  --slate-200: #f8fafc;
   --slate-100: #ffffff;
 
-  --blue-950: #042f2e;
-  --blue-900: #115e59;
-  --blue-800: #14b8a6;
-  --blue-700: #2dd4bf;
-  --blue-600: #5eead4;
-  --blue-500: #99f6e4;
+  --blue-950: #450a0a;
+  --blue-900: #7f1d1d;
+  --blue-800: #b91c1c;
+  --blue-700: #38bdf8; /* Light Sky Blue */
+  --blue-600: #2563eb; /* Cobalt Blue */
+  --blue-500: #f87171; /* Crimson Red */
 }
 
 @theme {
