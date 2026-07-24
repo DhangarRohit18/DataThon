@@ -52,6 +52,7 @@ export default function Home() {
     resetAll
   } = useGlobalStore();
 
+  const [lang, setLang] = useState('EN');
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -74,10 +75,6 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  if (!currentRole) {
-    return <LoginScreen />;
-  }
 
   // Grouped Navigation Items matching 18 Screens - dynamic depending on Role Permissions
   const getNavGroups = () => {
@@ -130,6 +127,10 @@ export default function Home() {
 
   const navGroups = getNavGroups();
 
+  if (!currentRole) {
+    return <LoginScreen />;
+  }
+
   const handleGlobalSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!localSearch.trim()) return;
@@ -151,8 +152,6 @@ export default function Home() {
     setActiveScreen('crimegpt');
     setCopilotOpen(false);
   };
-
-  const [lang, setLang] = useState('EN');
 
   const t = {
     EN: {
