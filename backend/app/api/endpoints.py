@@ -93,6 +93,14 @@ async def login_user(login_in: LoginRequest, db: AsyncSession = Depends(get_db))
 
 
 # 2. CASE FILE REGISTRY (FIR)
+class FIRCreateRequest(BaseModel):
+    case_number: str
+    police_station_id: str
+    crime_type: str
+    complainant: str
+    officer: str
+    summary: str
+
 @router.get("/firs", response_model=List[FIRResponseSchema])
 async def list_firs(
     status: Optional[str] = None,
@@ -105,8 +113,40 @@ async def list_firs(
     result = await db.execute(query)
     return list(result.scalars().all())
 
+@router.post("/firs", response_model=FIRResponseSchema)
+async def create_fir(
+    fir_in: FIRCreateRequest,
+    db: AsyncSession = Depends(get_db),
+    user_payload: dict = Depends(PermissionChecker(["fir:write"]))
+):
+    # Verify duplicates
+    query = select(FIR).where(FIR.case_number == fir_in.case_number)
+    result = await db.execute(query)
+    if result.scalars().first():
+        raise HTTPException(status_code=400, detail="FIR case number already exists")
+
+    fir_id = f"FIR-{int(datetime.utcnow().timestamp())}"
+    new_fir = FIR(
+        id=fir_id,
+        case_number=fir_in.case_number,
+        police_station_id=fir_in.police_station_id,
+        crime_type=fir_in.crime_type,
+        complainant=fir_in.complainant,
+        officer=fir_in.officer,
+        summary=fir_in.summary,
+        status="PENDING",
+        date=datetime.utcnow()
+    )
+    db.add(new_fir)
+    await db.commit()
+    await db.refresh(new_fir)
+    return new_fir
+
 
 # 3. CRIMINAL DIRECTORY
+class CriminalStatusUpdateRequest(BaseModel):
+    risk_score: int
+
 @router.get("/criminals/{id}", response_model=CriminalResponseSchema)
 async def get_criminal_profile(
     id: str,
@@ -118,6 +158,24 @@ async def get_criminal_profile(
     criminal = result.scalars().first()
     if not criminal:
         raise HTTPException(status_code=404, detail="Criminal record not found")
+    return criminal
+
+@router.post("/criminals/{id}/status", response_model=CriminalResponseSchema)
+async def update_criminal_status(
+    id: str,
+    status_in: CriminalStatusUpdateRequest,
+    db: AsyncSession = Depends(get_db),
+    user_payload: dict = Depends(PermissionChecker(["criminal:write"]))
+):
+    query = select(Accused).where(Accused.id == id)
+    result = await db.execute(query)
+    criminal = result.scalars().first()
+    if not criminal:
+        raise HTTPException(status_code=404, detail="Criminal record not found")
+    
+    criminal.risk_score = status_in.risk_score
+    await db.commit()
+    await db.refresh(criminal)
     return criminal
 
 
