@@ -73,6 +73,8 @@ interface GlobalState {
   setTimeSliderVal: (val: number) => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  lang: string;
+  setLang: (lang: string) => void;
   resetAll: () => void;
 }
 
@@ -250,6 +252,8 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     }
     set({ theme: nextTheme });
   },
+  lang: 'EN',
+  setLang: (lang) => set({ lang }),
   resetAll: () => set({
     currentRole: null,
     activeScreen: 'login',
@@ -258,6 +262,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     firsList: MOCK_FIRS,
     criminalsList: MOCK_CRIMINALS,
     searchQuery: '',
+    lang: 'EN',
     chatMessages: [
       {
         id: 'm1',

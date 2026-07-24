@@ -49,10 +49,11 @@ export default function Home() {
     notifications,
     markNotificationsRead,
     addAuditLog,
-    resetAll
+    resetAll,
+    lang,
+    setLang
   } = useGlobalStore();
 
-  const [lang, setLang] = useState('EN');
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

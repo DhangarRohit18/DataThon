@@ -922,6 +922,49 @@ export function CaseSimilarityScreen() {
   const [matchScore, setMatchScore] = useState<number | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { lang } = useGlobalStore();
+
+  const t = {
+    EN: {
+      title: "Upload FIR draft for cross-comparison",
+      desc: "AI vector models will compare patterns against 20,000+ historical KSP files",
+      drop: "Drag and drop FIR PDF here or click to browse",
+      ready: "Ready for comparison",
+      btnCompare: "Execute Semantic Comparison",
+      loading: "Running Vector RAG..."
+    },
+    KN: {
+      title: "ಅಡ್ಡ-ಹೋಲಿಕೆಗಾಗಿ ಎಫ್‌ಐಆರ್ ಕರಡನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      desc: "ಎಐ ವೆಕ್ಟರ್ ಮಾದರಿಗಳು ಮಾದರಿಗಳನ್ನು 20,000+ ಐತಿಹಾಸಿಕ ಕೆಎಸ್‌ಪಿ ಫೈಲ್‌ಗಳೊಂದಿಗೆ ಹೋಲಿಸುತ್ತವೆ",
+      drop: "ಎಫ್‌ಐಆರ್ ಪಿಡಿಎಫ್ ಅನ್ನು ಇಲ್ಲಿ ಎಳೆಯಿರಿ ಮತ್ತು ಬಿಡಿ ಅಥವಾ ಬ್ರೌಸ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
+      ready: "ಹೋಲಿಕೆಗೆ ಸಿದ್ಧವಾಗಿದೆ",
+      btnCompare: "ವೆಕ್ಟರ್ ಹೋಲಿಕೆಯನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಿ",
+      loading: "ವೆಕ್ಟರ್ ಆರ್‌ಎಜಿ ಚಾಲನೆಯಲ್ಲಿದೆ..."
+    },
+    HI: {
+      title: "क्रॉस-तुलना के लिए प्राथमिकी (FIR) मसौदा अपलोड करें",
+      desc: "एआई वेक्टर मॉडल 20,000+ ऐतिहासिक केएसपी फाइलों के खिलाफ पैटर्न की तुलना करेंगे",
+      drop: "प्राथमिकी पीडीएफ यहां खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें",
+      ready: "तुलना के लिए तैयार",
+      btnCompare: "सिमेंटिक तुलना निष्पादित करें",
+      loading: "वेक्टर आरएजी चल रहा है..."
+    },
+    MR: {
+      title: "क्रॉस-तुलनेसाठी एफआयआर मसुदा अपलोड करा",
+      desc: "एआय वेक्टर मॉडेल्स 20,000+ ऐतिहासिक केएसपी फायलींविरुद्ध पॅटर्नची तुलना करतील",
+      drop: "येथे एफआयआर पीडीएफ ड्रॅग आणि ड्रॉप करा किंवा ब्राउझ करण्यासाठी क्लिक करा",
+      ready: "तुलनेसाठी तयार",
+      btnCompare: "सिमेंटिक तुलना कार्यान्वित करा",
+      loading: "वेक्टर आरएजी चालू आहे..."
+    }
+  }[lang as 'EN' | 'KN' | 'HI' | 'MR'] || {
+    title: "Upload FIR draft for cross-comparison",
+    desc: "AI vector models will compare patterns against 20,000+ historical KSP files",
+    drop: "Drag and drop FIR PDF here or click to browse",
+    ready: "Ready for comparison",
+    btnCompare: "Execute Semantic Comparison",
+    loading: "Running Vector RAG..."
+  };
 
   const handleFileSelect = () => {
     setFileName("Draft_FIR_Cyber_KSP_2026.pdf");
@@ -939,8 +982,8 @@ export function CaseSimilarityScreen() {
   return (
     <div className="space-y-6">
       <div className="bg-slate-900 border border-slate-800 p-6 rounded-lg text-center max-w-xl mx-auto space-y-4">
-        <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">Upload FIR draft for cross-comparison</h3>
-        <p className="text-xs text-slate-400">AI vector models will compare patterns against 20,000+ historical KSP files</p>
+        <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">{t.title}</h3>
+        <p className="text-xs text-slate-400">{t.desc}</p>
         
         <div 
           onClick={handleFileSelect}
@@ -950,10 +993,10 @@ export function CaseSimilarityScreen() {
           {fileName ? (
             <div>
               <p className="text-xs font-semibold text-blue-500 font-mono">{fileName}</p>
-              <p className="text-[10px] text-slate-500 mt-1">Ready for comparison</p>
+              <p className="text-[10px] text-slate-500 mt-1">{t.ready}</p>
             </div>
           ) : (
-            <p className="text-xs text-slate-400">Drag and drop FIR PDF here or click to browse</p>
+            <p className="text-xs text-slate-400">{t.drop}</p>
           )}
         </div>
 
@@ -965,9 +1008,9 @@ export function CaseSimilarityScreen() {
           {loading ? (
             <div className="flex items-center justify-center gap-2">
               <span className="w-3.5 h-3.5 border-2 border-slate-300 border-t-transparent rounded-full animate-spin"></span>
-              <span>Running Vector RAG...</span>
+              <span>{t.loading}</span>
             </div>
-          ) : 'Execute Semantic Comparison'}
+          ) : t.btnCompare}
         </button>
       </div>
 
