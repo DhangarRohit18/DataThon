@@ -506,9 +506,19 @@ export function CrimeGPTScreen() {
 // 4. FIR EXPLORER SCREEN
 // ==========================================
 export function FIRExplorerScreen() {
-  const { firsList, selectedFIR, setSelectedFIR } = useGlobalStore();
+  const { firsList, selectedFIR, setSelectedFIR, addFIR } = useGlobalStore();
   const [districtFilter, setDistrictFilter] = useState('All');
   const [search, setSearch] = useState('');
+
+  // Form states for Create FIR
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newCaseNum, setNewCaseNum] = useState('');
+  const [newCrimeType, setNewCrimeType] = useState('Cyber Fraud');
+  const [newDistrict, setNewDistrict] = useState('Bengaluru City');
+  const [newStation, setNewStation] = useState('Koramangala Police Station');
+  const [newIO, setNewIO] = useState('Inspector R. K. Patil');
+  const [newComplainant, setNewComplainant] = useState('');
+  const [newSummary, setNewSummary] = useState('');
 
   const filteredFirs = firsList.filter((fir) => {
     const matchDistrict = districtFilter === 'All' || fir.district === districtFilter;
@@ -518,12 +528,49 @@ export function FIRExplorerScreen() {
     return matchDistrict && matchText;
   });
 
+  const handleCreateFIRSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newFirItem = {
+      id: `FIR-${Date.now()}`,
+      caseNumber: newCaseNum || `FIR ${Math.floor(1000 + Math.random() * 9000)}/2026`,
+      policeStation: newStation,
+      district: newDistrict,
+      crimeType: newCrimeType,
+      date: new Date().toISOString().split('T')[0],
+      status: 'PENDING',
+      complainant: newComplainant || 'Anonymous Source',
+      officer: newIO,
+      summary: newSummary || 'Investigation pending details submission.',
+      suspects: [],
+      attachments: [],
+      timeline: [
+        { date: new Date().toISOString().split('T')[0] + ' 10:00 AM', title: 'Incident Registered', description: 'FIR logged in digital registry.' }
+      ]
+    };
+    addFIR(newFirItem);
+    setSelectedFIR(newFirItem);
+    setIsModalOpen(false);
+
+    // Reset Form
+    setNewCaseNum('');
+    setNewComplainant('');
+    setNewSummary('');
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Filter and List Panel */}
       <div className="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-lg p-4 flex flex-col h-[600px]">
         <div className="space-y-3 mb-4">
-          <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">FIR Records Directory</h3>
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">FIR Records Directory</h3>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded transition duration-150"
+            >
+              + Create FIR
+            </button>
+          </div>
           <div className="relative">
             <input
               type="text"
@@ -657,6 +704,112 @@ export function FIRExplorerScreen() {
           </div>
         </div>
       </div>
+
+      {/* Create FIR Modal Overlay */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">Log New Case (Create FIR)</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-200 font-mono text-sm">&times;</button>
+            </div>
+
+            <form onSubmit={handleCreateFIRSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">Case Number</label>
+                <input
+                  type="text"
+                  placeholder="e.g. FIR 0115/2026"
+                  value={newCaseNum}
+                  onChange={(e) => setNewCaseNum(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-3 py-2 rounded focus:outline-none focus:border-blue-600 font-mono"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">Crime Category</label>
+                  <select
+                    value={newCrimeType}
+                    onChange={(e) => setNewCrimeType(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-350 text-xs px-2 py-2 rounded"
+                  >
+                    <option value="Cyber Fraud">Cyber Fraud</option>
+                    <option value="Organized Theft">Organized Theft</option>
+                    <option value="Narcotics Smuggling">Narcotics Smuggling</option>
+                    <option value="Money Laundering">Money Laundering</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">District Focus</label>
+                  <select
+                    value={newDistrict}
+                    onChange={(e) => setNewDistrict(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-355 text-xs px-2 py-2 rounded"
+                  >
+                    <option value="Bengaluru City">Bengaluru City</option>
+                    <option value="Mysuru City">Mysuru City</option>
+                    <option value="Hubballi-Dharwad">Hubballi-Dharwad</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">Investigating Officer (IO)</label>
+                <input
+                  type="text"
+                  value={newIO}
+                  onChange={(e) => setNewIO(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-3 py-2 rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">Complainant Name</label>
+                <input
+                  type="text"
+                  placeholder="Complainant or Institution name"
+                  value={newComplainant}
+                  onChange={(e) => setNewComplainant(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-3 py-2 rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] text-slate-400 font-semibold uppercase mb-1">Incident Summary</label>
+                <textarea
+                  placeholder="Detailed case incident reports, modus operandi descriptors..."
+                  value={newSummary}
+                  onChange={(e) => setNewSummary(e.target.value)}
+                  rows={3}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs px-3 py-2 rounded"
+                  required
+                ></textarea>
+              </div>
+
+              <div className="flex gap-2 justify-end pt-2 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-slate-850 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-bold py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2 px-4 rounded"
+                >
+                  Register FIR
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
