@@ -185,8 +185,8 @@ export default function Home() {
       {/* Top Navigation */}
       <header className="bg-slate-900 border-b border-slate-800 h-14 px-6 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <div className="bg-blue-950 p-1 border border-blue-800 rounded">
-            <ShieldCheckIcon className="w-5 h-5 text-blue-500" />
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center">
+            <img src="/logo.jpg" alt="KAVACH Logo" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold font-mono tracking-wider text-sm">{t.title}</span>

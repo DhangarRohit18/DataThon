@@ -60,8 +60,8 @@ export function LoginScreen() {
       <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-2xl relative overflow-hidden">
         {/* Government Branding Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto bg-blue-950 border border-blue-800 rounded-full flex items-center justify-center mb-4">
-            <ShieldCheckIcon className="w-12 h-12 text-blue-500 animate-pulse" />
+          <div className="w-24 h-24 mx-auto mb-4 border border-slate-800 rounded-full overflow-hidden bg-slate-950 flex items-center justify-center">
+            <img src="/logo.jpg" alt="KAVACH AI Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-2xl font-bold tracking-widest text-slate-100 font-mono">KAVACH AI</h1>
           <p className="text-xs text-blue-500 font-semibold tracking-wider mt-1 uppercase">Crime Intelligence Operating System</p>
