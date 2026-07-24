@@ -215,15 +215,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      {/* Gov.in Top Auxiliary Header Bar */}
+      <div className="bg-slate-950 text-[10px] text-slate-400 px-6 py-1 border-b border-slate-900 flex justify-between items-center select-none font-mono">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-2.5 h-1.5 bg-gradient-to-r from-orange-500 via-white to-green-600 rounded-sm"></span>
+          <span>GOVERNMENT OF INDIA &bull; गृह मंत्रालय (MINISTRY OF HOME AFFAIRS)</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="hover:text-slate-200 cursor-pointer">Sitemap</span>
+          <span className="text-slate-700">|</span>
+          <span className="hover:text-slate-200 cursor-pointer">Screen Reader Access</span>
+          <span className="text-slate-700">|</span>
+          <span className="text-emerald-500 font-bold">Secure Portal (gov.in)</span>
+        </div>
+      </div>
+
       {/* Top Navigation */}
       <header className="bg-slate-900 border-b border-slate-800 h-14 px-6 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-full overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center p-0.5 shadow-inner">
             <img src="/logo.jpg" alt="KAVACH Logo" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold font-mono tracking-wider text-sm">{t.title}</span>
-            <span className="text-[9px] text-slate-500 font-mono tracking-tight">{t.subtitle}</span>
+            <span className="font-extrabold font-mono tracking-widest text-sm text-slate-100">{t.title}</span>
+            <span className="text-[8px] text-slate-400 font-semibold tracking-wider uppercase">{t.subtitle}</span>
           </div>
         </div>
 
