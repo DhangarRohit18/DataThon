@@ -152,6 +152,35 @@ export default function Home() {
     setCopilotOpen(false);
   };
 
+  const [lang, setLang] = useState('EN');
+
+  const t = {
+    EN: {
+      title: "KAVACH AI",
+      subtitle: "Karnataka Police Command Console",
+      search: "Global Registry Search..."
+    },
+    KN: {
+      title: "ಕವಚ ಎಐ",
+      subtitle: "ಕರ್ನಾಟಕ ಪೊಲೀಸ್ ಕಮಾಂಡ್ ಕನ್ಸೋಲ್",
+      search: "ಜಾಗತಿಕ ನೋಂದಾವಣೆ ಹುಡುಕಾಟ..."
+    },
+    HI: {
+      title: "कवच एआई",
+      subtitle: "कर्नाटक पुलिस कमांड कंसोल",
+      search: "वैश्विक रजिस्ट्री खोज..."
+    },
+    MR: {
+      title: "कवच एआय",
+      subtitle: "कर्नाटक पोलीस कमांड कन्सोल",
+      search: "जागतिक नोंदणी शोध..."
+    }
+  }[lang as 'EN' | 'KN' | 'HI' | 'MR'] || {
+    title: "KAVACH AI",
+    subtitle: "Karnataka Police Command Console",
+    search: "Global Registry Search..."
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       {/* Top Navigation */}
@@ -160,8 +189,24 @@ export default function Home() {
           <div className="bg-blue-950 p-1 border border-blue-800 rounded">
             <ShieldCheckIcon className="w-5 h-5 text-blue-500" />
           </div>
-          <span className="font-bold font-mono tracking-wider text-sm">KAVACH AI</span>
-          <span className="text-[10px] text-slate-500 font-mono">Karnataka Police Command Console</span>
+          <div className="flex flex-col">
+            <span className="font-bold font-mono tracking-wider text-sm">{t.title}</span>
+            <span className="text-[9px] text-slate-500 font-mono tracking-tight">{t.subtitle}</span>
+          </div>
+        </div>
+
+        {/* Language Selection */}
+        <div className="ml-4">
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            className="bg-slate-950 border border-slate-800 text-slate-350 text-[10px] px-2 py-1 rounded focus:outline-none focus:border-blue-600 font-mono"
+          >
+            <option value="EN">English</option>
+            <option value="KN">ಕನ್ನಡ (Kannada)</option>
+            <option value="HI">हिंदी (Hindi)</option>
+            <option value="MR">मराठी (Marathi)</option>
+          </select>
         </div>
 
         {/* Global Search and Breadcrumbs */}
@@ -172,7 +217,7 @@ export default function Home() {
           >
             <div className="flex items-center gap-2">
               <MagnifyingGlassIcon className="w-4 h-4 text-slate-500" />
-              <span>Global Registry Search...</span>
+              <span>{t.search}</span>
             </div>
             <kbd className="bg-slate-900 px-1.5 py-0.5 rounded text-[10px] border border-slate-700 font-mono">Ctrl+K</kbd>
           </div>
