@@ -434,11 +434,15 @@ export function CrimeGPTScreen() {
 
               {/* Reasoning timeline */}
               {msg.reasoningSteps && (
-                <details className="mt-2.5 pt-1 text-[9px] text-slate-500 font-mono cursor-pointer">
-                  <summary className="hover:text-slate-300">View Reasoning Timeline ({msg.reasoningSteps.length} steps)</summary>
-                  <ul className="mt-1 list-disc pl-4 space-y-1.5">
+                <details className="mt-3 pt-2 text-[10px] text-slate-400 font-mono cursor-pointer border-t border-slate-800/40">
+                  <summary className="hover:text-teal-400 select-none font-semibold transition-colors duration-150">
+                    View Investigative Steps ({msg.reasoningSteps.length})
+                  </summary>
+                  <ul className="mt-2 list-none pl-1 space-y-2 border-l border-teal-800/40">
                     {msg.reasoningSteps.map((step, idx) => (
-                      <li key={idx}>{step}</li>
+                      <li key={idx} className="pl-3 relative before:content-['•'] before:absolute before:left-0 before:text-teal-500">
+                        {step}
+                      </li>
                     ))}
                   </ul>
                 </details>
